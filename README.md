@@ -21,7 +21,7 @@
 <hr>
 <h3 align="center">[<a href="https://arxiv.org/">arXiv</a>]</h3>
 
-Official PyTorch implementation of **PT-EDDM**, a novel end-to-end framework for multi-modality image translation. Its training consists of two stages: pre-train and tuning. We introduce intermediate states in the denoising process, embed guidance information in the intermediate states for more refined conditional generation, and improve denoising speed, in order to solve the problems of insufficient guidance from the source modality. We propose a progressive tuning strategy based on EDDM, which utilizes prior obtained during training to tuning the noise schedule and length of the VSSPE, achieving a balance between sampling speed and generation quality in the inference performance of the model. We incorporate historical prior constraints into the joint distribution of posterior sampling, which reduces errors and restricts each image iteration to a specified manifold. Experiments demonstrate that our method performs effectively across three medical datasets and one thermal infrared visible light facial dataset.
+Official PyTorch implementation of **PT-EDDM**. Experiments demonstrate that our method performs effectively across three medical datasets and one thermal infrared visible light facial dataset.
 
 <p align="center">
   <img src="figures/frame.png" alt="frame" style="width: 1200px; height: auto;">
