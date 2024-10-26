@@ -117,23 +117,28 @@ def evaluate_samples(real_data, fake_sample, input_channels):
     to_range_0_1 = lambda x: (x + 1.) / 2.
     real_data = real_data.cpu().numpy()
     fake_sample = fake_sample.cpu().numpy()
-
-    real_data = to_range_0_1(real_data) / real_data.max()
-    fake_sample = to_range_0_1(fake_sample) / fake_sample.max()
-
-    psnr_val = psnr(real_data, fake_sample, data_range=real_data.max() - real_data.min())
-    mae_val = np.mean(np.abs(real_data - fake_sample))
-
-    if input_channels == 1:
-        ssim_val = ssim(real_data[0, 0], fake_sample[0, 0], data_range=real_data.max() - real_data.min())
-    elif input_channels == 3:
-        real_data = np.squeeze(real_data).transpose(1, 2, 0)
-        fake_sample = np.squeeze(fake_sample).transpose(1, 2, 0)
-        ssim_val = ssim(real_data, fake_sample, channel_axis=-1, data_range=real_data.max() - real_data.min())
-    else:
-        raise ValueError("Unsupported number of input channels")
-
-    return psnr_val, ssim_val * 100, mae_val
+    psnr_list = []
+    ssim_list = []
+    mae_list = []
+    for i in range(real_data.shape[0]):
+        real_data_i = real_data[i]
+        fake_sample_i = fake_sample[i]
+        real_data_i = to_range_0_1(real_data_i) / real_data_i.max()
+        fake_sample_i = to_range_0_1(fake_sample_i) / fake_sample_i.max()
+        psnr_val = psnr(real_data_i, fake_sample_i, data_range=real_data_i.max() - real_data_i.min())
+        mae_val = np.mean(np.abs(real_data_i - fake_sample_i))
+        if input_channels == 1:
+            ssim_val = ssim(real_data_i[0], fake_sample_i[0], data_range=real_data_i.max() - real_data_i.min())
+        elif input_channels == 3:
+            real_data_i = np.squeeze(real_data_i).transpose(1, 2, 0)
+            fake_sample_i = np.squeeze(fake_sample_i).transpose(1, 2, 0)
+            ssim_val = ssim(real_data_i, fake_sample_i, channel_axis=-1, data_range=real_data_i.max() - real_data_i.min())
+        else:
+            raise ValueError("Unsupported number of input channels")
+        psnr_list.append(psnr_val)
+        ssim_list.append(ssim_val * 100)
+        mae_list.append(mae_val)
+    return psnr_list, ssim_list, mae_list
 
 def save_image(img, save_dir, phase, iteration, input_channels):
     file_path = '{}/{}({}).png'.format(save_dir, phase, str(iteration).zfill(4))
@@ -157,7 +162,7 @@ def sample_and_test(args):
     epoch_chosen=args.which_epoch
 
     test_dataset = GetDataset("test", args.input_path, args.source, args.target, dim=args.input_channels, normed=args.normed)
-    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=4)
+    test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     mapping_model = NCSNpp(args).to(device)
 
@@ -174,6 +179,7 @@ def sample_and_test(args):
     PSNR = []
     SSIM = []
     MAE = []
+    image_iteration = 0
 
     for iteration, (source_data,  target_data) in enumerate(test_dataloader):
         
@@ -187,17 +193,18 @@ def sample_and_test(args):
         x_T = torch.randn_like(target_data)
         fake_sample = sample_from_model(pos_coeff, mapping_model, x_T, source_data, args)
 
-        psnr_val, ssim_val, mae_val = evaluate_samples(target_data, fake_sample, args.input_channels)
-        PSNR.append(psnr_val)
-        SSIM.append(ssim_val)
-        MAE.append(mae_val)
-        print(str(iteration) + "," + str(psnr_val) + "," + str(ssim_val * 100) + "," + str(mae_val))
+        psnr_list, ssim_list, mae_list = evaluate_samples(target_data, fake_sample, args.input_channels)
+        PSNR.extend(psnr_list)
+        SSIM.extend(ssim_list)
+        MAE.extend(mae_list)
+        print(f"[{iteration}/{len(test_dataloader)}]," + str(psnr_list[0]) + "," + str(ssim_list[0]) + "," + str(mae_list[0]))
+        for i in range(fake_sample.shape[0]):
+            save_image(fake_sample, save_dir, args.phase, image_iteration, args.input_channels)
+            image_iteration = image_iteration + 1
 
-        save_image(fake_sample, save_dir, args.phase, iteration, args.input_channels)
-
-    print('Total PSNR: mean:' + str(sum(PSNR) / len(PSNR)) + ' max:' + str(max(PSNR)) + ' min:' + str(min(PSNR)) + ' var:' + str(np.var(PSNR)))
-    print('Total SSIM: mean:' + str(sum(SSIM) / len(SSIM)) + ' max:' + str(max(SSIM)) + ' min:' + str(min(SSIM)) + ' var:' + str(np.var(SSIM)))
-    print('Total MAE: mean:' + str(sum(MAE) / len(MAE)) + ' max:' + str(max(MAE)) + ' min:' + str(min(MAE)) + ' var:' + str(np.var(MAE) * 1000))
+    print('TEST PSNR: mean:' + str(sum(PSNR) / len(PSNR)) + ' max:' + str(max(PSNR)) + ' min:' + str(min(PSNR)) + ' var:' + str(np.var(PSNR)))
+    print('TEST SSIM: mean:' + str(sum(SSIM) / len(SSIM)) + ' max:' + str(max(SSIM)) + ' min:' + str(min(SSIM)) + ' var:' + str(np.var(SSIM)))
+    print('TEST MAE: mean:' + str(sum(MAE) / len(MAE)) + ' max:' + str(max(MAE)) + ' min:' + str(min(MAE)) + ' var:' + str(np.var(MAE) * 1000))
 
 
 if __name__ == '__main__':
