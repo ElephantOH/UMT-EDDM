@@ -127,14 +127,20 @@ By default, the script runs on a `single GPU`.
 
 ```
 python test_EDDM.py \
-  --input_channels 1 \
-  --source T1 \
-  --target T2 \
-  --batch_size 2 \
-  --which_epoch 120 \
-  --gpu_chose 0 \
-  --input_path ./datasets/BrainTs20 \
-  --checkpoint_path ./checkpoints/brats_1to2_EDDM_logs
+        --input_channels 1 \
+        --source T1 \
+        --target T2 \
+        --batch_size 2 \
+        --which_epoch 120 \
+        --gpu_chose 0 \
+        --input_path ./datasets/BrainTs20 \
+        --checkpoint_path ./checkpoints/brats_1to2_EDDM_logs \
+        --vp_t 9 \
+        --vp_k 7 \
+        --vp_max 22.5 \
+        --vp_sparse 2 \
+        --vp_noise 100.0 \
+        --vp_prior 0.05
 ```
 
 ### Argument descriptions
@@ -156,27 +162,29 @@ Some arguments are common to both training and testing and are not listed here. 
 
 Refer to the testing section above to perform inference with the checkpoints. PSNR (dB), SSIM (%) and MAE are listed as mean ± std across the test set.
 
-| Dataset | Task      | PSNR         | SSIM         | MAE           | Checkpoint                                                   |
-|---------|-----------|--------------|--------------|---------------| ------------------------------------------------------------ |
-| BRATS   | T1→T2     | 25.53 ± 2.08 | 91.92 ± 1.73 | 0.0275 ± 4.68 | [Link](https://github.com/) |
-| BRATS   | T2→T1     | 24.39 ± 1.76 | 92.13 ± 1.18 | 0.0314 ± 3.89 | [Link](https://github.com/) |
-| OASIS3  | T1→T2     | 23.05 ± 6.49 | 80.52 ± 5.84 | 0.0298 ± 9.82 | [Link](https://github.com/) |
-| OASIS3  | T2→T1     | 23.59 ± 6.12 | 82.10 ± 4.63 | 0.0310 ± 1.01 | [Link](https://github.com/) |
-| IXI     | T1→T2     | 27.85 ± 3.17 | 91.30 ± 0.85 | 0.0170 ± 1.12 | [Link](https://github.com/) |
-| IXI     | T2→T1     | 27.90 ± 4.97 | 93.60 ± 0.88 | 0.0187 ± 3.72 | [Link](https://github.com/) |
-| TFW     | VIS.→THE. | 21.08 ± 3.73 | 77.84 ± 2.60 | 0.0516 ± 1.82 | [Link](https://github.com/) |
+| Dataset | Task      | PSNR         | SSIM         | MAE           | Checkpoint                   |
+|---------|-----------|--------------|--------------|---------------|------------------------------|
+| BRATS   | T1→T2     | 25.53 ± 2.08 | 91.92 ± 1.73 | 0.0275 ± 4.68 | [Link](https://github.com/)  |
+| BRATS   | T2→T1     | 24.52 ± 1.82 | 92.38 ± 1.16 | 0.0313 ± 4.09 | [Link](https://github.com/)  |
+| OASIS3  | T1→T2     | 23.05 ± 6.49 | 80.52 ± 5.84 | 0.0298 ± 9.82 | -                            |
+| OASIS3  | T2→T1     | 23.59 ± 6.12 | 82.10 ± 4.63 | 0.0310 ± 1.01 | -                            |
+| IXI     | T1→T2     | 27.85 ± 3.17 | 91.30 ± 0.85 | 0.0170 ± 1.12 | -                            |
+| IXI     | T2→T1     | 27.90 ± 4.97 | 93.60 ± 0.88 | 0.0187 ± 3.72 | -                            |
+| TFW     | VIS.→THE. | 21.08 ± 3.73 | 77.86 ± 2.63 | 0.0515 ± 1.80 | [Link](https://github.com/)  |
 
-TUNING hyperparameter
+## 🐮 Tuning RESULT
 
-| Dataset | Task      | vp_t    | vp_max | vp_k | vp_sparse | vp_noise | vp_prior |
-|---------|-----------|---------|--------|------|-----------|----------|----------|
-| BRATS   | T1→T2     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
-| BRATS   | T2→T1     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
-| OASIS3  | T1→T2     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
-| OASIS3  | T2→T1     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
-| IXI     | T1→T2     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
-| IXI     | T2→T1     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
-| TFW     | VIS.→THE. | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+This result is obtained by using the open source weights mentioned above and running the `tuning_EDDM.py` code file.
+
+| Dataset | Task      | vp_t | vp_max | vp_k | vp_sparse | vp_noise | vp_prior |
+|---------|-----------|------|--------|------|-----------|----------|----------|
+| BRATS   | T1→T2     | 9    | 22.5   | 5.   | 2         | 100.     | 0.05     |
+| BRATS   | T2→T1     | 4    | 17.5   | 3.   | 1         | 50.      | 0.       |
+| OASIS3  | T1→T2     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
+| OASIS3  | T2→T1     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
+| IXI     | T1→T2     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
+| IXI     | T2→T1     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
+| TFW     | VIS.→THE. | 4    | 20.    | 6.   | 1         | 0.       | 0.       |
 
 
 ## 🦊 Code
