@@ -78,8 +78,12 @@ def sample_posterior(coefficients, x_0, x_t, t):
         mean, _, log_var = q_posterior(x_0, x_t, t)
         prior = x_0 - mean
         unit_prior = torch.nn.functional.normalize(prior, p=2, dim=1)
-        unit_noise = torch.nn.functional.normalize(torch.randn_like(x_t), p=2, dim=1)
-        noise = unit_noise * args.vp_noise + unit_prior * args.vp_prior
+        noise = torch.randn_like(x_t)
+        unit_noise = noise / np.linalg.norm(noise[0][0].cpu().detach().numpy().flatten())
+        if args.vp_noise < 0:
+            noise = noise + unit_prior * args.vp_prior
+        else:
+            noise = unit_noise * args.vp_noise + unit_prior * args.vp_prior
         if args.sample_fixed:
             noise = 0.
         nonzero_mask = (1 - (t == 0).type(torch.float32))
@@ -115,7 +119,7 @@ def load_checkpoint(checkpoint_dir, mapping_network, name_of_network, epoch,devi
     mapping_network.load_state_dict(ckpt)
     mapping_network.eval()
 
-def evaluate_samples(real_data, fake_sample, input_channels):
+def evaluate_samples(real_data, fake_sample):
     to_range_0_1 = lambda x: (x + 1.) / 2.
     real_data = real_data.cpu().numpy()
     fake_sample = fake_sample.cpu().numpy()
@@ -125,13 +129,15 @@ def evaluate_samples(real_data, fake_sample, input_channels):
     for i in range(real_data.shape[0]):
         real_data_i = real_data[i]
         fake_sample_i = fake_sample[i]
-        real_data_i = to_range_0_1(real_data_i) / real_data_i.max()
-        fake_sample_i = to_range_0_1(fake_sample_i) / fake_sample_i.max()
+        real_data_i = to_range_0_1(real_data_i)
+        real_data_i = real_data_i / real_data_i.max()
+        fake_sample_i = to_range_0_1(fake_sample_i)
+        fake_sample_i = fake_sample_i / fake_sample_i.max()
         psnr_val = psnr(real_data_i, fake_sample_i, data_range=real_data_i.max() - real_data_i.min())
         mae_val = np.mean(np.abs(real_data_i - fake_sample_i))
-        if input_channels == 1:
+        if args.input_channels == 1:
             ssim_val = ssim(real_data_i[0], fake_sample_i[0], data_range=real_data_i.max() - real_data_i.min())
-        elif input_channels == 3:
+        elif args.input_channels == 3:
             real_data_i = np.squeeze(real_data_i).transpose(1, 2, 0)
             fake_sample_i = np.squeeze(fake_sample_i).transpose(1, 2, 0)
             ssim_val = ssim(real_data_i, fake_sample_i, channel_axis=-1, data_range=real_data_i.max() - real_data_i.min())
@@ -192,11 +198,12 @@ def sample_and_test(args):
             source_data = source_data.squeeze(1)
         x_T = torch.randn_like(target_data)
         fake_sample = sample_from_model(pos_coeff, mapping_model, x_T, source_data, args)
-        psnr_list, ssim_list, mae_list = evaluate_samples(target_data, fake_sample, args.input_channels)
+        psnr_list, ssim_list, mae_list = evaluate_samples(target_data, fake_sample)
         PSNR.extend(psnr_list)
         SSIM.extend(ssim_list)
         MAE.extend(mae_list)
         progress_bar.set_postfix(PSNR=sum(PSNR) / len(PSNR), SSIM=sum(SSIM) / len(SSIM), MAE=sum(MAE) / len(MAE))
+        tqdm.write(f"[{iteration}/{len(test_dataloader)}] PSNR: {psnr_list[0]}, SSIM: {ssim_list[0]}, MAE: {mae_list[0]}")
         for i in range(fake_sample.shape[0]):
             save_image(fake_sample[i], save_dir, args.phase, image_iteration, args.input_channels)
             image_iteration += 1
@@ -258,10 +265,10 @@ if __name__ == '__main__':
     parser.add_argument('--vp_max', type=float, default=20)
     parser.add_argument('--vp_k', type=float, default=5)
     parser.add_argument('--vp_sparse', type=float, default=1)
-    parser.add_argument('--vp_noise', type=float, default=1)
+    parser.add_argument('--vp_noise', type=float, default=-1)
     parser.add_argument('--vp_prior', type=float, default=0)
-    parser.add_argument('--MO', type=float, default=1)
-    parser.add_argument('--AO', type=float, default=0)
+    parser.add_argument('--MO', type=float, default=1.)
+    parser.add_argument('--AO', type=float, default=0.)
     args = parser.parse_args()
     
     sample_and_test(args)
