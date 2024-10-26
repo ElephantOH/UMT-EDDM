@@ -199,7 +199,7 @@ def sample_and_test(args):
         MAE.extend(mae_list)
         print(f"[{iteration}/{len(test_dataloader)}]," + str(psnr_list[0]) + "," + str(ssim_list[0]) + "," + str(mae_list[0]))
         for i in range(fake_sample.shape[0]):
-            save_image(fake_sample, save_dir, args.phase, image_iteration, args.input_channels)
+            save_image(fake_sample[i], save_dir, args.phase, image_iteration, args.input_channels)
             image_iteration = image_iteration + 1
 
     print('TEST PSNR: mean:' + str(sum(PSNR) / len(PSNR)) + ' max:' + str(max(PSNR)) + ' min:' + str(min(PSNR)) + ' var:' + str(np.var(PSNR)))
@@ -241,7 +241,7 @@ if __name__ == '__main__':
     parser.add_argument('--nz', type=int, default=100)
     parser.add_argument('--z_emb_dim', type=int, default=256)
     parser.add_argument('--t_emb_dim', type=int, default=256)
-    parser.add_argument('--batch_size', type=int, default=1, help='sample generating batch size')
+    parser.add_argument('--batch_size', type=int, default=2, help='sample generating batch size')
 
     #parameters
     parser.add_argument('--lr_g', type=float, default=1.5e-4, help='learning rate g')
