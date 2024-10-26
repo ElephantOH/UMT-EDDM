@@ -137,15 +137,28 @@ Some arguments are common to both training and testing and are not listed here. 
 
 Refer to the testing section above to perform inference with the checkpoints. PSNR (dB), SSIM (%) and MAE are listed as mean ± std across the test set.
 
-| Dataset | Task      | PSNR         | SSIM         | MAE          | Checkpoint                                                   |
-|---------|-----------| ------------ | ------------ |--------------| ------------------------------------------------------------ |
-| BRATS   | T1→T2     | 31.63 ± 1.53 | 95.64 ± 1.12 | 0.245 ± 1.12 | [Link](https://github.com/) |
-| BRATS   | T2→T1     | 31.28 ± 1.56 | 95.03 ± 1.27 | 0.245 ± 1.12 | [Link](https://github.com/) |
-| OASIS3  | T1→T2     | 31.63 ± 1.53 | 95.64 ± 1.12 | 0.245 ± 1.12 | [Link](https://github.com/) |
-| OASIS3  | T2→T1     | 31.28 ± 1.56 | 95.03 ± 1.27 | 0.245 ± 1.12 | [Link](https://github.com/) |
-| IXI     | T1→T2     | 31.63 ± 1.53 | 95.64 ± 1.12 | 0.245 ± 1.12 | [Link](https://github.com/) |
-| IXI     | T2→T1     | 31.28 ± 1.56 | 95.03 ± 1.27 | 0.245 ± 1.12 | [Link](https://github.com/) |
-| TFW     | VIS.→THE. | 31.63 ± 1.53 | 95.64 ± 1.12 | 0.245 ± 1.12 | [Link](https://github.com/) |
+| Dataset | Task      | PSNR         | SSIM         | MAE           | Checkpoint                                                   |
+|---------|-----------|--------------|--------------|---------------| ------------------------------------------------------------ |
+| BRATS   | T1→T2     | 25.53 ± 2.08 | 91.92 ± 1.73 | 0.0275 ± 4.68 | [Link](https://github.com/) |
+| BRATS   | T2→T1     | 24.39 ± 1.76 | 92.13 ± 1.18 | 0.0314 ± 3.89 | [Link](https://github.com/) |
+| OASIS3  | T1→T2     | 23.05 ± 6.49 | 80.52 ± 5.84 | 0.0298 ± 9.82 | [Link](https://github.com/) |
+| OASIS3  | T2→T1     | 23.59 ± 6.12 | 82.10 ± 4.63 | 0.0310 ± 1.01 | [Link](https://github.com/) |
+| IXI     | T1→T2     | 27.85 ± 3.17 | 91.30 ± 0.85 | 0.0170 ± 1.12 | [Link](https://github.com/) |
+| IXI     | T2→T1     | 27.90 ± 4.97 | 93.60 ± 0.88 | 0.0187 ± 3.72 | [Link](https://github.com/) |
+| TFW     | VIS.→THE. | 21.08 ± 3.73 | 77.84 ± 2.60 | 0.0516 ± 1.82 | [Link](https://github.com/) |
+
+TUNING hyperparameter
+
+| Dataset | Task      | vp_t    | vp_max | vp_k | vp_sparse | vp_noise | vp_prior |
+|---------|-----------|---------|--------|------|-----------|----------|----------|
+| BRATS   | T1→T2     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+| BRATS   | T2→T1     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+| OASIS3  | T1→T2     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+| OASIS3  | T2→T1     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+| IXI     | T1→T2     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+| IXI     | T2→T1     | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+| TFW     | VIS.→THE. | 4       | 20.    | 5.   | 1         | 1        | 0.       |
+
 
 ## 🦊 Code
 
