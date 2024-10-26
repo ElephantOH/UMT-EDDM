@@ -5,6 +5,8 @@ import numpy as np
 import os
 import torchvision
 from PIL import Image
+from tqdm import tqdm
+
 from backbones.ncsnpp_generator_adagn import NCSNpp
 from dataset import GetDataset
 from skimage.metrics import structural_similarity as ssim
@@ -181,26 +183,23 @@ def sample_and_test(args):
     MAE = []
     image_iteration = 0
 
-    for iteration, (source_data,  target_data) in enumerate(test_dataloader):
-        
+    progress_bar = tqdm(enumerate(test_dataloader), total=len(test_dataloader), desc="Testing", colour='green')
+    for iteration, (source_data, target_data) in progress_bar:
         target_data = target_data.to(device, non_blocking=True)
         source_data = source_data.to(device, non_blocking=True)
-
         if args.input_channels == 3:
             target_data = target_data.squeeze(1)
             source_data = source_data.squeeze(1)
-
         x_T = torch.randn_like(target_data)
         fake_sample = sample_from_model(pos_coeff, mapping_model, x_T, source_data, args)
-
         psnr_list, ssim_list, mae_list = evaluate_samples(target_data, fake_sample, args.input_channels)
         PSNR.extend(psnr_list)
         SSIM.extend(ssim_list)
         MAE.extend(mae_list)
-        print(f"[{iteration}/{len(test_dataloader)}]," + str(psnr_list[0]) + "," + str(ssim_list[0]) + "," + str(mae_list[0]))
+        progress_bar.set_postfix(PSNR=sum(PSNR) / len(PSNR), SSIM=sum(SSIM) / len(SSIM), MAE=sum(MAE) / len(MAE))
         for i in range(fake_sample.shape[0]):
             save_image(fake_sample[i], save_dir, args.phase, image_iteration, args.input_channels)
-            image_iteration = image_iteration + 1
+            image_iteration += 1
 
     print('TEST PSNR: mean:' + str(sum(PSNR) / len(PSNR)) + ' max:' + str(max(PSNR)) + ' min:' + str(min(PSNR)) + ' var:' + str(np.var(PSNR)))
     print('TEST SSIM: mean:' + str(sum(SSIM) / len(SSIM)) + ' max:' + str(max(SSIM)) + ' min:' + str(min(SSIM)) + ' var:' + str(np.var(SSIM)))
