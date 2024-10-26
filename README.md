@@ -62,7 +62,7 @@ To utilize your custom data set class, implement your version in `dataset.py` by
   
 ```
 
-## 🙉 Training
+## 🙉 Pre-Training
 
 Execute the following command to start or resume training.
 Model checkpoints are stored in the `/checkpoints/$LOG` directory.
@@ -100,6 +100,25 @@ python train_EDDM.py \
 | `--MO`                    | [Optional] Hidden state multiplication operator.                                                      |
 | `--AO`                    | [Optional] Hidden state addition operator.                                                            |
 
+## 🐧 Tuning
+
+Run the following command to start tuning.
+The predicted images are saved under `/checkpoints/$LOG/generated_samples` directory.
+By default, the script runs on a `single GPU`. 
+
+```
+python tuning_EDDM.py \
+  --input_channels 1 \
+  --source T1 \
+  --target T2 \
+  --batch_size 2 \
+  --tuning_dataset_num 200 \
+  --which_epoch 120 \
+  --gpu_chose 0 \
+  --input_path ./datasets/BrainTs20 \
+  --checkpoint_path ./checkpoints/brats_1to2_EDDM_logs
+```
+
 ## 🐣 Testing
 
 Run the following command to start testing.
@@ -111,7 +130,7 @@ python test_EDDM.py \
   --input_channels 1 \
   --source T1 \
   --target T2 \
-  --batch_size 1 \
+  --batch_size 2 \
   --which_epoch 120 \
   --gpu_chose 0 \
   --input_path ./datasets/BrainTs20 \
