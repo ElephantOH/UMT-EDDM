@@ -1,7 +1,7 @@
 <hr>
 <h1 align="center">
-  PT-EDDM <br>
-  <sub>PT-EDDM: Accurate, Concise, and Efficient Fine-Paired Image Translation</sub>
+  UMT-EDDM <br>
+  <sub>UMT-EDDM: Accurate, Concise and Efficient Fine-Paired Image Translation</sub>
 </h1>
 <div align="center">
   <a href="https://github.com/" target="_blank">***</a><sup>1,2</sup> &ensp; <b>&middot;</b> &ensp;
@@ -21,7 +21,7 @@
 <hr>
 <h3 align="center">[<a href="https://arxiv.org/">arXiv</a>]</h3>
 
-Official PyTorch implementation of **PT-EDDM**. Experiments demonstrate that our method performs effectively across three medical datasets and one thermal infrared visible light facial dataset.
+Official PyTorch implementation of **UMT-EDDM**. Experiments demonstrate that our method performs effectively across three medical datasets and one thermal infrared visible light facial dataset.
 
 <p align="center">
   <img src="figures/frame.png" alt="frame" style="width: 1200px; height: auto;">
@@ -178,13 +178,13 @@ This result is obtained by using the open source weights mentioned above and run
 
 | Dataset | Task      | vp_t | vp_max | vp_k | vp_sparse | vp_noise | vp_prior |
 |---------|-----------|------|--------|------|-----------|----------|----------|
-| BRATS   | T1→T2     | 9    | 22.5   | 5.   | 2         | 100.     | 0.05     |
-| BRATS   | T2→T1     | 4    | 17.5   | 3.   | 1         | 50.      | 0.       |
-| OASIS3  | T1→T2     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
-| OASIS3  | T2→T1     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
-| IXI     | T1→T2     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
-| IXI     | T2→T1     | 4    | 20.    | 5.   | 1         | 0.       | 0.       |
-| TFW     | VIS.→THE. | 4    | 20.    | 6.   | 1         | 0.       | 0.       |
+| BRATS   | T1→T2     | 9    | 22.5   | 5.00 | 2         | 100.00   | 0.05     |
+| BRATS   | T2→T1     | 4    | 17.5   | 3.00 | 1         | 50.00    | 0.00     |
+| OASIS3  | T1→T2     | 8    | 17.5   | 4.00 | 2         | 50.00    | 0.05     |
+| OASIS3  | T2→T1     | 4    | 17.5   | 6.00 | 2         | 50.00    | 0.00     |
+| IXI     | T1→T2     | 4    | 27.5   | 4.00 | 2         | 50.00    | 0.10     |
+| IXI     | T2→T1     | 4    | 22.5   | 6.00 | 1         | 0.00     | 0.05     |
+| TFW     | VIS.→THE. | 4    | 20.    | 6.00 | 1         | 0.00     | 0.00     |
 
 
 ## 🦊 Code
