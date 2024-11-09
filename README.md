@@ -1,7 +1,7 @@
 <hr>
 <h1 align="center">
   UMT-EDDM <br>
-  <sub>UMT-EDDM: Accurate, Concise and Efficient Fine-Paired Image Translation</sub>
+  <sub>UMT-EDDM: Using Known Optimal to Derive Unknown Optimal</sub>
 </h1>
 <div align="center">
   <a href="https://github.com/" target="_blank">***</a><sup>1,2</sup> &ensp; <b>&middot;</b> &ensp;
@@ -161,6 +161,8 @@ Some arguments are common to both training and testing and are not listed here. 
 ## 🐸 Checkpoint
 
 Refer to the testing section above to perform inference with the checkpoints. PSNR (dB), SSIM (%) and MAE are listed as mean ± std across the test set.
+
+The paper is currently undergoing blind review. If you need weight open source or code open source, please contact us `elephantoh@qq.com`.
 
 | Dataset | Task      | PSNR         | SSIM         | MAE           | Checkpoint                   |
 |---------|-----------|--------------|--------------|---------------|------------------------------|
