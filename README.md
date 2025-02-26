@@ -154,7 +154,7 @@ Some arguments are common to both training and testing and are not listed here. 
 | `--vp_t`        | [Optional] Maximum time step in the inference phase.                  |
 | `--vp_max`      | [Optional] Maximum intensity of noise schedule in inference stage.    |
 | `--vp_k`        | [Optional] Inference stage noise schedule with added noise curvature. |
-| `--vp_sparse`   | [Optional] Sparse coefficient of time step.                           |
+| `--vp_sparse`   | [Optional] Sparse coefficient of timestep.                            |
 | `--vp_noise`    | [Optional] Noise prior mixing ratio.                                  |
 | `--vp_prior`    | [Optional] Noise prior mixing ratio.                                  |
 
@@ -164,15 +164,15 @@ Refer to the testing section above to perform inference with the checkpoints. PS
 
 The paper is currently undergoing blind review. If you need weight open source or code open source, please contact us `elephantoh@qq.com`.
 
-| Dataset | Task      | PSNR         | SSIM         | MAE           | Checkpoint                   |
-|---------|-----------|--------------|--------------|---------------|------------------------------|
-| BRATS   | T1→T2     | 25.53 ± 2.08 | 91.92 ± 1.73 | 0.0275 ± 4.68 | [Link](https://github.com/)  |
-| BRATS   | T2→T1     | 24.52 ± 1.82 | 92.38 ± 1.16 | 0.0313 ± 4.09 | [Link](https://github.com/)  |
-| OASIS3  | T1→T2     | 23.05 ± 6.49 | 80.52 ± 5.84 | 0.0298 ± 9.82 | -                            |
-| OASIS3  | T2→T1     | 23.59 ± 6.12 | 82.10 ± 4.63 | 0.0310 ± 1.01 | -                            |
-| IXI     | T1→T2     | 27.85 ± 3.17 | 91.30 ± 0.85 | 0.0170 ± 1.12 | -                            |
-| IXI     | T2→T1     | 27.90 ± 4.97 | 93.60 ± 0.88 | 0.0187 ± 3.72 | -                            |
-| TFW     | VIS.→THE. | 21.08 ± 3.73 | 77.86 ± 2.63 | 0.0515 ± 1.80 | [Link](https://github.com/)  |
+| Dataset | Task      | PSNR         | SSIM         | MAE           | Checkpoint                                                                                       |
+|---------|-----------|--------------|--------------|---------------|--------------------------------------------------------------------------------------------------|
+| BRATS   | T1→T2     | 25.53 ± 2.08 | 91.92 ± 1.73 | 0.0275 ± 4.68 | [Link](https://drive.google.com/file/d/15li_UEROye5F0VLn8hd81fSsju6yB-Ji/view?usp=drive_link)    |
+| BRATS   | T2→T1     | 24.52 ± 1.82 | 92.38 ± 1.16 | 0.0313 ± 4.09 | [Link](https://drive.google.com/file/d/1BkgU0kruMkUM4C-3y4ycAylMG87rIYV8/view?usp=drive_link)    |
+| OASIS3  | T1→T2     | 23.05 ± 6.49 | 80.52 ± 5.84 | 0.0298 ± 9.82 | [Link](https://drive.google.com/file/d/1ulkkxqJvNZof0egaXUsQfiOse2_wBnYw/view?usp=drive_link)    |
+| OASIS3  | T2→T1     | 23.59 ± 6.12 | 82.10 ± 4.63 | 0.0310 ± 1.01 | [Link](https://drive.google.com/file/d/1rKaV9KrOiE9NCM6JSTWkHGdIpRCjlJyb/view?usp=drive_link)    |
+| IXI     | T1→T2     | 27.85 ± 3.17 | 91.30 ± 0.85 | 0.0170 ± 1.12 | [Link](https://drive.google.com/file/d/15n1kHyOZlmP5mkjYqV4WQQ3ciqx9_aJh/view?usp=drive_link)    |
+| IXI     | T2→T1     | 27.90 ± 4.97 | 93.60 ± 0.88 | 0.0187 ± 3.72 | [Link](https://drive.google.com/file/d/1xHIG-CAbffXRLb-F-_7F1jQamktqY_7U/view?usp=drive_link)    |
+| TFW     | VIS.→THE. | 21.08 ± 3.73 | 77.86 ± 2.63 | 0.0515 ± 1.80 | [Link](https://drive.google.com/file/d/1UDpM2EtqwZkfEHebAXEzLJrhQ6vxpmSp/view?usp=drive_link)    |
 
 ## 🐮 Tuning RESULT
 
@@ -191,7 +191,7 @@ This result is obtained by using the open source weights mentioned above and run
 
 ## 🦊 Code
 
-The code for the `test` is open, and the code for the `pre-train` and `tuning` will be made public shortly.
+The code for the `test` and `tuning` is open, and the code for the `pre-train` will be made public shortly.
 
 ## 🐭 Citation
 
