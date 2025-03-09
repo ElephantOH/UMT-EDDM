@@ -1,7 +1,7 @@
 <hr>
 <h1 align="center">
   UMT-EDDM <br>
-  <sub>UMT-EDDM: Using Known Optimal to Derive Unknown Optimal</sub>
+  <sub>UMT-EDDM: Diffusion Model for Optimal Parameter Adaptation from Known to Unknown Data</sub>
 </h1>
 <div align="center">
   <a href="https://github.com/" target="_blank">***</a><sup>1,2</sup> &ensp; <b>&middot;</b> &ensp;
